@@ -459,7 +459,7 @@ async def document_verification(request: DocumentRequest, db: Session = Depends(
 
 # ===== Revenue Analytics (The Money View) =====
 
-@app.get("/api/revenue-summary")
+@app.get("/api/performance-metrics")
 async def get_revenue_summary(db: Session = Depends(get_db)):
     """
     Get the 2.5% Recovery Dashboard metrics.

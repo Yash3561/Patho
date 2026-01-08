@@ -4,7 +4,13 @@
  * interactive viewer, and revenue analytics.
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const isProd = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
+
+const API_BASE_URL = isProd
+    ? 'https://patho-production.up.railway.app'
+    : 'http://localhost:8000';
+
+console.log("SHARK DEBUG: Currently using API:", API_BASE_URL);
 
 // ===== Types =====
 
@@ -271,9 +277,10 @@ export async function documentVerification(request: DocumentRequest): Promise<{ 
 
 /**
  * Get revenue summary for the Money View dashboard.
+ * Renamed to performance-metrics to avoid ad-blockers.
  */
 export async function getRevenueSummary(): Promise<RevenueSummary> {
-    const response = await fetch(`${API_BASE_URL}/api/revenue-summary`);
+    const response = await fetch(`${API_BASE_URL}/api/performance-metrics`);
 
     if (!response.ok) {
         const error = await response.json();
