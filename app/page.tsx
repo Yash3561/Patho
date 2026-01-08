@@ -32,7 +32,7 @@ import {
 import {
   getCases, analyzeSlide, documentVerification, downloadAuditPDF,
   getRevenueSummary, logRegionClick, createCase, deleteCase, updateCase, uploadSlideImage,
-  type Case, type BillingAnalysis, type AnnotatedRegion, type RevenueSummary
+  type Case, type BillingAnalysis, type AnnotatedRegion, type RevenueSummary, API_BASE_URL
 } from "@/lib/api"
 
 // Status configuration
@@ -957,6 +957,18 @@ export default function PathoAIDashboard() {
             )}
           </div>
 
+
+          {/* SHARK: Live Ticker */}
+          <div className="hidden md:flex items-center gap-2 mr-4 bg-emerald-900/10 border border-emerald-900/30 px-3 py-1 rounded-full animate-pulse">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+            <span className="text-xs font-medium text-emerald-400">
+              Recovered Today:
+            </span>
+            <span className="text-xs font-mono font-bold text-emerald-300">
+              ${revenueSummary?.total_revenue_recovered?.toFixed(2) || '0.00'}
+            </span>
+          </div>
+
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(Math.max(50, zoom - 25))}>
               <ZoomOut className="w-4 h-4" />
@@ -982,7 +994,7 @@ export default function PathoAIDashboard() {
                     <img
                       src={
                         selectedCase.image_url.startsWith('/uploads')
-                          ? `http://localhost:8000${selectedCase.image_url}`
+                          ? `${API_BASE_URL}${selectedCase.image_url}`
                           : selectedCase.image_url.startsWith('http')
                             ? selectedCase.image_url
                             : `/${selectedCase.image_url.replace(/^\//, '')}`
@@ -1121,6 +1133,22 @@ export default function PathoAIDashboard() {
                 {statusConfig[selectedCase.status]?.label || 'Pending'}
               </Badge>
             )}
+          </div>
+        </div>
+
+        {/* SHARK: Audit Readiness Bar */}
+        <div className="px-4 pb-4 border-b border-gray-800">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Audit Shield Strength</span>
+            <span className={`text-xs font-mono font-bold ${(billingAnalysis?.audit_defense_score || 0) >= 90 ? 'text-emerald-400' : 'text-amber-400'}`}>
+              {billingAnalysis?.audit_defense_score || 0}/100
+            </span>
+          </div>
+          <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-1000 ease-out ${(billingAnalysis?.audit_defense_score || 0) >= 90 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+              style={{ width: `${billingAnalysis?.audit_defense_score || 0}%` }}
+            />
           </div>
         </div>
 

@@ -5,7 +5,7 @@
  */
 
 // SHARK DEBUG: Force Production URL for local testing
-const API_BASE_URL = 'https://patho-production.up.railway.app';
+export const API_BASE_URL = 'https://patho-production.up.railway.app';
 // const isProd = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
 // const API_BASE_URL = isProd
 //     ? 'https://patho-production.up.railway.app'
