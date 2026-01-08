@@ -1,163 +1,278 @@
-# 🔬 PathoAI Revenue Recovery Engine
+# 🔬 PathoAI - Revenue Recovery Engine
 
-> AI-powered pathology billing optimization using Gemini to identify under-documented cases and recover revenue.
+<div align="center">
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi)
-![Gemini](https://img.shields.io/badge/Gemini-2.0_Flash-4285F4?logo=google)
-![License](https://img.shields.io/badge/License-MIT-green)
+![PathoAI Banner](https://img.shields.io/badge/PathoAI-Revenue%20Recovery%20Engine-emerald?style=for-the-badge&logo=microscope)
 
-## 🎯 Problem
+**AI-Powered Pathology Billing Optimization for 2026 CMS Compliance**
 
-Pathology labs lose **$2.3M annually** due to under-coded specimens. Complex cases often get billed as simple 88305s when they warrant higher-reimbursement codes (88307, 88309).
+[![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Gemini AI](https://img.shields.io/badge/Gemini-1.5%20Flash-4285F4?style=flat-square&logo=google)](https://ai.google.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-## 💡 Solution
+[Demo](#demo) • [Features](#features) • [Quick Start](#quick-start) • [Deployment](#deployment) • [API Docs](#api-documentation)
 
-PathoAI analyzes pathology findings and:
-- **Maps findings to 2026 CPT codes** (including AI-assisted codes 0596T-0763T)
-- **Calculates revenue delta** between current and recommended billing
-- **Generates audit-ready documentation** with CMS-compliant justifications
-- **Creates Audit Shield PDFs** for insurance defense
+</div>
 
-## 🖥️ Screenshots
+---
 
-*Coming soon*
+## 🎯 Overview
 
-## 🛠️ Tech Stack
+PathoAI is an enterprise-grade pathology billing optimization platform that uses **Google Gemini AI** to analyze histopathology slides and recommend appropriate CPT code upgrades. Built for 2026 CMS Human-in-the-Loop compliance requirements.
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | Next.js 15, React 19, shadcn/ui, Tailwind CSS |
-| **Backend** | FastAPI, Python 3.12 |
-| **AI** | Google Gemini 2.0 Flash |
-| **PDF** | ReportLab |
-| **Database** | Local JSON (MVP) → PostgreSQL (Production) |
+### Key Benefits
+- 💰 **Revenue Recovery**: Identify missed billing opportunities
+- ✅ **Audit-Ready**: Generate CMS-compliant documentation
+- 🤖 **AI-Powered**: Gemini 1.5 Flash for intelligent analysis  
+- 🔒 **Human-in-the-Loop**: Pathologist verification workflow
+- 📄 **Professional PDFs**: Audit Shield certified reports
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| **AI Slide Analysis** | Gemini-powered complexity detection |
+| **CPT Code Optimization** | Intelligent upgrade recommendations |
+| **Interactive Viewer** | Click to verify annotated regions |
+| **Revenue Dashboard** | Real-time analytics and ROI tracking |
+| **PDF Export** | Professional audit-ready documentation |
+| **Case Management** | Full CRUD with search and filters |
+| **Image Upload** | Slide image management |
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- Python 3.10+
-- pnpm (recommended) or npm
-- Gemini API Key ([Get one here](https://makersuite.google.com/app/apikey))
+- Node.js 20+
+- Python 3.11+
+- pnpm (`npm install -g pnpm`)
+- Google Gemini API Key
 
-### 1. Clone the repo
-```bash
-git clone https://github.com/Yash3561/Patho.git
-cd Patho
-```
+### 1. Clone & Install
 
-### 2. Setup Frontend
 ```bash
+git clone https://github.com/your-username/patho.git
+cd patho
+
+# Frontend dependencies
 pnpm install
-```
 
-### 3. Setup Backend
-```bash
+# Backend dependencies
 cd backend
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment
-```bash
-# In project root
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+### 2. Environment Setup
+
+Create `.env` in root:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-### 5. Run Development Servers
+Create `backend/.env`:
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-**Terminal 1 - Backend:**
+### 3. Run Locally
+
 ```bash
+# Terminal 1 - Backend
 cd backend
 python -m uvicorn main:app --reload --port 8000
-```
 
-**Terminal 2 - Frontend:**
-```bash
+# Terminal 2 - Frontend
 pnpm dev
 ```
 
-### 6. Open the App
-Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 📁 Project Structure
-
-```
-patho/
-├── app/                    # Next.js app router
-│   ├── page.tsx           # Main dashboard
-│   ├── layout.tsx         # Root layout
-│   └── globals.css        # Global styles
-├── backend/
-│   ├── main.py            # FastAPI entry point
-│   ├── services/
-│   │   ├── billing_agent.py   # Gemini AI integration
-│   │   ├── pdf_generator.py   # ReportLab PDF creator
-│   │   └── local_db.py        # JSON database
-│   └── requirements.txt
-├── components/
-│   └── ui/                # shadcn/ui components
-├── lib/
-│   └── api.ts             # Frontend API client
-├── architecture.md        # Detailed system design
-└── README.md
-```
-
-## 🔌 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/analyze` | Analyze slide for billing optimization |
-| `POST` | `/api/document` | Save verified case to database |
-| `GET` | `/api/export-pdf` | Generate Audit Shield PDF |
-| `GET` | `/api/cases` | List all documented cases |
-| `GET` | `/api/revenue-summary` | Get revenue recovery metrics |
-
-### Example: Analyze a Slide
-```bash
-curl -X POST http://localhost:8000/api/analyze \
-  -H "Content-Type: application/json" \
-  -d '{"slide_id": "WSI-2024-1847"}'
-```
-
-## 🎨 Features
-
-- [x] 3-pane dashboard layout
-- [x] AI-powered billing analysis
-- [x] Complexity indicator verification
-- [x] PDF audit report generation
-- [x] Demo mode (works without API key)
-- [ ] Dynamic case management
-- [ ] Revenue analytics dashboard
-- [ ] User authentication
-- [ ] Slide image upload
-
-## 🔐 Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GEMINI_API_KEY` | Google Gemini API key | No (falls back to demo) |
-| `NEXT_PUBLIC_API_URL` | Backend URL | No (defaults to localhost:8000) |
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📧 Contact
-
-**Yash** - [@Yash3561](https://github.com/Yash3561)
+Visit `http://localhost:3000` 🎉
 
 ---
 
-<p align="center">
-  Made with ❤️ for pathology labs everywhere
-</p>
+## 🌐 Deployment
+
+### Option 1: Railway (Backend) + Vercel (Frontend) ⭐ Recommended
+
+#### Deploy Backend to Railway
+
+1. **Create Railway Account**: [railway.app](https://railway.app)
+2. **Create New Project** → "Deploy from GitHub repo"
+3. **Select this repository**
+4. **Configure**:
+   - Root Directory: `backend`
+   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+5. **Add Environment Variables**:
+   - `GEMINI_API_KEY`: Your Gemini API key
+6. **Deploy** → Copy your Railway URL (e.g., `https://patho-backend.railway.app`)
+
+#### Deploy Frontend to Vercel
+
+1. **Create Vercel Account**: [vercel.com](https://vercel.com)
+2. **Import** → Select GitHub repository
+3. **Configure**:
+   - Framework: Next.js
+   - Root Directory: `.` (root)
+4. **Environment Variables**:
+   - `NEXT_PUBLIC_API_URL`: Your Railway backend URL
+5. **Deploy**
+
+### Option 2: Render (Full Stack)
+
+#### Backend
+1. Go to [render.com](https://render.com) → New Web Service
+2. Connect GitHub repo
+3. Configure:
+   - Root Directory: `backend`
+   - Build: `pip install -r requirements.txt`
+   - Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. Add `GEMINI_API_KEY` environment variable
+5. Deploy
+
+#### Frontend
+1. New Static Site → Connect same repo
+2. Build: `pnpm build`
+3. Publish: `.next`
+4. Add `NEXT_PUBLIC_API_URL` environment variable
+
+### Option 3: Docker Compose
+
+```bash
+docker-compose up -d
+```
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - uploads:/app/uploads
+
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+volumes:
+  uploads:
+```
+
+---
+
+## 🔧 CI/CD Pipeline
+
+This project includes a GitHub Actions workflow (`.github/workflows/ci-cd.yml`) that:
+
+1. **Tests**: Runs backend tests and frontend type checking
+2. **Builds**: Builds production bundles
+3. **Deploys**: Auto-deploys to Railway/Vercel on main branch push
+
+### Required Secrets
+
+Add these to your GitHub repository secrets:
+
+| Secret | Description |
+|--------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `RAILWAY_TOKEN` | Railway API token |
+| `VERCEL_TOKEN` | Vercel API token |
+| `VERCEL_ORG_ID` | Vercel organization ID |
+| `VERCEL_PROJECT_ID` | Vercel project ID |
+
+---
+
+## 📚 API Documentation
+
+Once running, access the API docs at:
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+
+### Key Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/cases` | List all cases |
+| `POST` | `/api/cases` | Create new case |
+| `POST` | `/api/analyze` | AI analysis |
+| `POST` | `/api/document` | Verify findings |
+| `GET` | `/api/export-pdf` | Generate PDF |
+| `GET` | `/api/revenue-summary` | Analytics |
+
+---
+
+## 🏗️ Project Structure
+
+```
+patho/
+├── app/                    # Next.js frontend
+│   ├── page.tsx           # Main dashboard
+│   └── layout.tsx         # App layout
+├── backend/
+│   ├── main.py            # FastAPI application
+│   ├── models.py          # SQLAlchemy models
+│   ├── services/
+│   │   ├── billing_agent.py    # Gemini AI integration
+│   │   ├── pdf_generator.py    # ReportLab PDF gen
+│   │   └── db_service.py       # Database operations
+│   ├── requirements.txt   # Python dependencies
+│   └── Dockerfile         # Container config
+├── lib/
+│   └── api.ts             # Frontend API client
+├── components/ui/         # shadcn/ui components
+├── .github/workflows/     # CI/CD pipeline
+├── vercel.json            # Vercel config
+└── railway.json           # Railway config
+```
+
+---
+
+## 🔐 Environment Variables
+
+### Frontend (.env)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### Backend (backend/.env)
+```env
+GEMINI_API_KEY=your_gemini_api_key
+DATABASE_URL=sqlite:///./pathoai.db
+```
+
+---
+
+## 📄 License
+
+MIT License - feel free to use for your projects!
+
+---
+
+## 🙏 Acknowledgments
+
+- **Google Gemini AI** - Powering intelligent analysis
+- **shadcn/ui** - Beautiful component library
+- **FastAPI** - High-performance Python API
+- **ReportLab** - Professional PDF generation
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the Microsoft Summit 2026**
+
+[⬆ Back to Top](#-pathoai---revenue-recovery-engine)
+
+</div>
