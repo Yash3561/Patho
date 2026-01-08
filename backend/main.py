@@ -315,42 +315,56 @@ async def analyze_slide(request: AnalyzeRequest, db: Session = Depends(get_db)):
             findings=request.findings
         )
         
-        # Generate annotated regions for interactive viewer
-        # In production, this would come from computer vision
-        annotated_regions = [
-            {
-                "id": 1,
-                "x": 120, "y": 150, "width": 80, "height": 60,
-                "label": "High-grade nuclei cluster",
-                "description": "Marked nuclear pleomorphism with irregular contours",
-                "cpt_impact": "+$6.20",
-                "billable": True
-            },
-            {
-                "id": 2,
-                "x": 280, "y": 200, "width": 100, "height": 70,
-                "label": "Mitotic figures",
-                "description": "18 mitoses per 10 HPF - elevated activity",
-                "cpt_impact": "+$4.40",
-                "billable": True
-            },
-            {
-                "id": 3,
-                "x": 180, "y": 320, "width": 90, "height": 50,
-                "label": "Perineural invasion",
-                "description": "Tumor cells surrounding nerve bundle",
-                "cpt_impact": "+$5.80",
-                "billable": True
-            },
-            {
-                "id": 4,
-                "x": 350, "y": 280, "width": 70, "height": 80,
-                "label": "Lymphovascular invasion",
-                "description": "Tumor emboli within vascular spaces",
-                "cpt_impact": "+$2.00",
-                "billable": True
-            }
-        ]
+        # IMPORTANT: Annotated regions should come from actual computer vision analysis
+        # For demo/MVP, we only show regions for the demo image, not user uploads
+        # In production, integrate a vision model (Gemini Vision, pathology-specific AI, etc.)
+        
+        annotated_regions = []
+        
+        # Only show demo regions for the default demo image
+        if case and case.image_url == "/microscopic-tissue-sample-histopathology-cells-pin.jpg":
+            # These are illustrative demo regions for the sample image only
+            annotated_regions = [
+                {
+                    "id": 1,
+                    "x": 120, "y": 150, "width": 80, "height": 60,
+                    "label": "High-grade nuclei cluster",
+                    "description": "Marked nuclear pleomorphism with irregular contours",
+                    "cpt_impact": "+$6.20",
+                    "billable": True,
+                    "demo_only": True
+                },
+                {
+                    "id": 2,
+                    "x": 280, "y": 200, "width": 100, "height": 70,
+                    "label": "Mitotic figures",
+                    "description": "18 mitoses per 10 HPF - elevated activity",
+                    "cpt_impact": "+$4.40",
+                    "billable": True,
+                    "demo_only": True
+                },
+                {
+                    "id": 3,
+                    "x": 180, "y": 320, "width": 90, "height": 50,
+                    "label": "Perineural invasion",
+                    "description": "Tumor cells surrounding nerve bundle",
+                    "cpt_impact": "+$5.80",
+                    "billable": True,
+                    "demo_only": True
+                },
+                {
+                    "id": 4,
+                    "x": 350, "y": 280, "width": 70, "height": 80,
+                    "label": "Lymphovascular invasion",
+                    "description": "Tumor emboli within vascular spaces",
+                    "cpt_impact": "+$2.00",
+                    "billable": True,
+                    "demo_only": True
+                }
+            ]
+        # For user-uploaded images: NO fake regions - that would be misleading/fraud
+        # The AI provides text-based analysis (audit narrative, complexity indicators)
+        # but does NOT claim to have detected visual features without real CV
         
         # Add annotated regions to result
         result["annotated_regions"] = annotated_regions
