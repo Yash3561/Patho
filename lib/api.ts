@@ -4,11 +4,12 @@
  * interactive viewer, and revenue analytics.
  */
 
-const isProd = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
-
-const API_BASE_URL = isProd
-    ? 'https://patho-production.up.railway.app'
-    : 'http://localhost:8000';
+// SHARK DEBUG: Force Production URL for local testing
+const API_BASE_URL = 'https://patho-production.up.railway.app';
+// const isProd = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
+// const API_BASE_URL = isProd
+//     ? 'https://patho-production.up.railway.app'
+//     : 'http://localhost:8000';
 
 console.log("SHARK DEBUG: Currently using API:", API_BASE_URL);
 

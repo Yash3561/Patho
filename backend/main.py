@@ -59,7 +59,9 @@ billing_agent = BillingAgent()
 pdf_generator = PDFGenerator()
 
 # Seed demo data on startup
-seed_demo_data()
+@app.on_event("startup")
+async def startup_event():
+    seed_demo_data()
 
 
 # ===== Request/Response Models =====
