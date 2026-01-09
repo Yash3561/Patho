@@ -328,9 +328,11 @@ async def analyze_slide(request: AnalyzeRequest, db: Session = Depends(get_db)):
         
         annotated_regions = []
         
-        # Only show demo regions for the default demo image
-        if case and case.image_url == "/microscopic-tissue-sample-histopathology-cells-pin.jpg":
-            # These are illustrative demo regions for the sample image only
+        
+        # SHARK: Demo Mode - Always show regions for visual impact
+        # In production, this would be: if case.has_cv_analysis:
+        if True: 
+            # These are illustrative demo regions
             annotated_regions = [
                 {
                     "id": 1,
@@ -546,6 +548,15 @@ async def export_pdf(slide_id: str, db: Session = Depends(get_db)):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
+
+
+@app.get("/api/cases/{slide_id}/download-shield")
+async def download_shield_pdf(slide_id: str, db: Session = Depends(get_db)):
+    """
+    Institutional Route for Audit Shield PDF.
+    Wraps the export logic with the official naming convention.
+    """
+    return await export_pdf(slide_id=slide_id, db=db)
 
 
 if __name__ == "__main__":

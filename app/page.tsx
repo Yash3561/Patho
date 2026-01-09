@@ -1233,7 +1233,13 @@ export default function PathoAIDashboard() {
                     {billingAnalysis.complexity_indicators.map((indicator, i) => (
                       <div
                         key={i}
-                        className={`text-xs p-2 rounded border transition-all ${clickedRegions.has(i + 1)
+                        onClick={() => {
+                          if (!clickedRegions.has(i + 1)) {
+                            setClickedRegions(prev => new Set([...prev, i + 1]))
+                            setAuditLogs(prev => [...prev, `Verified indicator: ${indicator}`])
+                          }
+                        }}
+                        className={`text-xs p-2 rounded border transition-all cursor-pointer hover:bg-gray-800 ${clickedRegions.has(i + 1)
                           ? 'bg-emerald-900/20 border-emerald-800/50 text-emerald-300'
                           : 'bg-gray-900/50 border-gray-800 text-gray-400'
                           }`}

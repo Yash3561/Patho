@@ -198,7 +198,7 @@ class RevenueService:
     def get_summary(db: Session) -> dict:
         """Get current revenue summary metrics."""
         cases = db.query(PathologyCase).filter(
-            PathologyCase.status.in_(["VERIFIED", "EXPORTED"])
+            PathologyCase.status.in_(["VERIFIED", "EXPORTED", "ANALYZED"])
         ).all()
         
         if not cases:
