@@ -259,6 +259,7 @@ export default function PathoAIDashboard() {
           : c
       ))
       setSelectedCase(prev => prev ? { ...prev, status: 'ANALYZED' } : null)
+      loadRevenueSummary()
       setAuditLogs(prev => [...prev, `AI Analysis completed for Slide ${selectedCase.slide_id}`, `Found ${result.annotated_regions.length} potential regions`, `Compliance confidence: ${(result.confidence_score * 100).toFixed(0)}%`])
     } catch (error) {
       console.error("Analysis failed:", error)

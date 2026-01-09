@@ -11,6 +11,10 @@ export const RevenueTicker = ({ caseVerified, initialTotal = 12450.00 }: { caseV
         }
     }, [caseVerified]);
 
+    useEffect(() => {
+        setTotal(initialTotal);
+    }, [initialTotal]);
+
     return (
         <div className="bg-slate-950 border-l border-slate-800 p-4 h-full flex flex-col justify-center min-w-[200px]">
             <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
