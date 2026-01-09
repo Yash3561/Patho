@@ -167,7 +167,7 @@ export default function PathoAIDashboard() {
 
     setIsLoadingBilling(true)
     try {
-      const response = await fetch(`http://localhost:8000/api/cases/${encodeURIComponent(caseItem.slide_id)}`)
+      const response = await fetch(`${API_BASE_URL}/api/cases/${encodeURIComponent(caseItem.slide_id)}`)
       if (!response.ok) throw new Error('Failed to fetch case details')
       const caseDetail = await response.json()
 
