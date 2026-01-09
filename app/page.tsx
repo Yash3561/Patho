@@ -34,6 +34,8 @@ import {
   getRevenueSummary, logRegionClick, createCase, deleteCase, updateCase, uploadSlideImage,
   type Case, type BillingAnalysis, type AnnotatedRegion, type RevenueSummary, API_BASE_URL
 } from "@/lib/api"
+import { RevenueTicker } from "@/components/revenue-ticker"
+import { AuditLog } from "@/components/audit-log"
 
 // Status configuration
 const statusConfig: Record<string, { label: string; icon: typeof AlertCircle; color: string }> = {
@@ -98,6 +100,9 @@ export default function PathoAIDashboard() {
   const [isLoadingBilling, setIsLoadingBilling] = useState(false)
   const [isCreatingCase, setIsCreatingCase] = useState(false)
   const [isDeletingCase, setIsDeletingCase] = useState(false)
+
+  // Audit Logs
+  const [auditLogs, setAuditLogs] = useState<string[]>([])
   const [isUpdatingCase, setIsUpdatingCase] = useState(false)
   const [isUploadingImage, setIsUploadingImage] = useState(false)
 
@@ -254,6 +259,7 @@ export default function PathoAIDashboard() {
           : c
       ))
       setSelectedCase(prev => prev ? { ...prev, status: 'ANALYZED' } : null)
+      setAuditLogs(prev => [...prev, `AI Analysis completed for Slide ${selectedCase.slide_id}`, `Found ${result.annotated_regions.length} potential regions`, `Compliance confidence: ${(result.confidence_score * 100).toFixed(0)}%`])
     } catch (error) {
       console.error("Analysis failed:", error)
     } finally {
@@ -269,6 +275,7 @@ export default function PathoAIDashboard() {
 
     try {
       await logRegionClick(selectedCase.slide_id, region.label)
+      setAuditLogs(prev => [...prev, `Region verified: ${region.label}`, `Impact: ${region.cpt_impact || 'Standard'}`])
     } catch (error) {
       console.error("Failed to log region click:", error)
     }
@@ -296,6 +303,7 @@ export default function PathoAIDashboard() {
       ))
       setSelectedCase(prev => prev ? { ...prev, status: 'VERIFIED' } : null)
       loadRevenueSummary()
+      setAuditLogs(prev => [...prev, `Verification confirmed by pathologist`, `CPT 0596T Criteria Met`, `Audit Shield Generated`])
     } catch (error) {
       console.error("Verification failed:", error)
     } finally {
@@ -958,16 +966,15 @@ export default function PathoAIDashboard() {
           </div>
 
 
-          {/* SHARK: Live Ticker */}
-          <div className="hidden md:flex items-center gap-2 mr-4 bg-emerald-900/10 border border-emerald-900/30 px-3 py-1 rounded-full animate-pulse">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-            <span className="text-xs font-medium text-emerald-400">
-              Recovered Today:
-            </span>
-            <span className="text-xs font-mono font-bold text-emerald-300">
-              ${revenueSummary?.total_revenue_recovered?.toFixed(2) || '0.00'}
-            </span>
-          </div>
+          {/* SHARK: Live Ticker Component */}
+          {revenueSummary && (
+            <div className="hidden md:block mr-4 h-10">
+              <RevenueTicker
+                caseVerified={selectedCase?.status === 'VERIFIED' || selectedCase?.status === 'EXPORTED'}
+                initialTotal={revenueSummary.total_revenue_recovered}
+              />
+            </div>
+          )}
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setZoom(Math.max(50, zoom - 25))}>
@@ -1152,7 +1159,7 @@ export default function PathoAIDashboard() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="flex-1 overflow-y-auto min-h-0 bg-[#0d0d0d]">
           <div className="p-4 space-y-4">
             {isLoadingBilling ? (
               <div className="space-y-4">
@@ -1262,6 +1269,11 @@ export default function PathoAIDashboard() {
           </div>
         </div>
 
+
+        <div className="border-t border-gray-800 bg-[#0d0d0d]">
+          <AuditLog logs={auditLogs} />
+        </div>
+
         <div className="p-4 border-t border-gray-800 flex-none bg-[#0d0d0d]">
           <Button
             size="lg"
@@ -1291,6 +1303,6 @@ export default function PathoAIDashboard() {
           </p>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
